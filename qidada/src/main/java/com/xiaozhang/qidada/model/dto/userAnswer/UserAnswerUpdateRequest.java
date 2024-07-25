@@ -18,19 +18,14 @@ public class UserAnswerUpdateRequest implements Serializable {
     private Long id;
 
     /**
-     * 标题
+     * 应用 id
      */
-    private String title;
+    private Long appId;
 
     /**
-     * 内容
+     * 用户答案（JSON 数组）
      */
-    private String content;
-
-    /**
-     * 标签列表
-     */
-    private List<String> tags;
+    private List<String> choices;
 
     private static final long serialVersionUID = 1L;
 }

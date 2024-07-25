@@ -1,5 +1,7 @@
 package com.xiaozhang.qidada.service;
 
+
+
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
@@ -10,8 +12,8 @@ import com.xiaozhang.qidada.model.vo.UserAnswerVO;
 import javax.servlet.http.HttpServletRequest;
 
 /**
- * 用户答题记录服务
-
+ * 用户答案服务
+ *
  */
 public interface UserAnswerService extends IService<UserAnswer> {
 
@@ -32,7 +34,7 @@ public interface UserAnswerService extends IService<UserAnswer> {
     QueryWrapper<UserAnswer> getQueryWrapper(UserAnswerQueryRequest userAnswerQueryRequest);
     
     /**
-     * 获取用户答题记录封装
+     * 获取用户答案封装
      *
      * @param userAnswer
      * @param request
@@ -41,7 +43,7 @@ public interface UserAnswerService extends IService<UserAnswer> {
     UserAnswerVO getUserAnswerVO(UserAnswer userAnswer, HttpServletRequest request);
 
     /**
-     * 分页获取用户答题记录封装
+     * 分页获取用户答案封装
      *
      * @param userAnswerPage
      * @param request

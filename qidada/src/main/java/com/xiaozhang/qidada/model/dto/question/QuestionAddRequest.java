@@ -17,27 +17,14 @@ import java.util.List;
 public class QuestionAddRequest implements Serializable {
 
     /**
-     * id
-     */
-    @TableId(type = IdType.ASSIGN_ID)
-    private Long id;
-
-    /**
      * 题目内容（json格式）
      */
-    private String questionContent;
+    private List<QuestionContentDTO> questionContent;
 
     /**
      * 应用 id
      */
     private Long appId;
 
-    /**
-     * 创建用户 id
-     */
-    private Long userId;
-
-
-    @TableField(exist = false)
     private static final long serialVersionUID = 1L;
 }

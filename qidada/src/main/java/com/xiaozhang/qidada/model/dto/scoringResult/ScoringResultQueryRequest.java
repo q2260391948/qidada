@@ -22,7 +22,6 @@ public class ScoringResultQueryRequest extends PageRequest implements Serializab
     /**
      * id
      */
-    @TableId(type = IdType.AUTO)
     private Long id;
 
     /**
@@ -35,6 +34,10 @@ public class ScoringResultQueryRequest extends PageRequest implements Serializab
      */
     private String resultDesc;
 
+    /**
+     * 结果图片
+     */
+    private String resultPicture;
 
     /**
      * 结果属性集合 JSON，如 [I,S,T,J]
@@ -56,7 +59,15 @@ public class ScoringResultQueryRequest extends PageRequest implements Serializab
      */
     private Long userId;
 
+    /**
+     * id
+     */
+    private Long notId;
 
-    @TableField(exist = false)
+    /**
+     * 搜索词
+     */
+    private String searchText;
+
     private static final long serialVersionUID = 1L;
 }

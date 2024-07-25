@@ -17,20 +17,16 @@ public class UserAnswerEditRequest implements Serializable {
      */
     private Long id;
 
-    /**
-     * 标题
-     */
-    private String title;
 
     /**
-     * 内容
+     * 应用 id
      */
-    private String content;
+    private Long appId;
 
     /**
-     * 标签列表
+     * 用户答案（JSON 数组）
      */
-    private List<String> tags;
+    private List<String> choices;
 
     private static final long serialVersionUID = 1L;
 }

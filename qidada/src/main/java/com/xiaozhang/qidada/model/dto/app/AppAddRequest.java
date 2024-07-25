@@ -17,12 +17,6 @@ import java.util.List;
 public class AppAddRequest implements Serializable {
 
     /**
-     * id
-     */
-    @TableId(type = IdType.ASSIGN_ID)
-    private Long id;
-
-    /**
      * 应用名
      */
     private String appName;
@@ -47,32 +41,5 @@ public class AppAddRequest implements Serializable {
      */
     private Integer scoringStrategy;
 
-    /**
-     * 审核状态：0-待审核, 1-通过, 2-拒绝
-     */
-    private Integer reviewStatus;
-
-    /**
-     * 审核信息
-     */
-    private String reviewMessage;
-
-    /**
-     * 审核人 id
-     */
-    private Long reviewerId;
-
-    /**
-     * 审核时间
-     */
-    private Date reviewTime;
-
-    /**
-     * 创建用户 id
-     */
-    private Long userId;
-
-
-    @TableField(exist = false)
     private static final long serialVersionUID = 1L;
 }
