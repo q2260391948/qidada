@@ -5,7 +5,7 @@
         <a-space>
           <div class="titleBar" style="text-align: center">
             <img class="logo" src="../assets/logo.png" alt="" />
-            <div class="logo-text">答题哟</div>
+            <div class="logo-text">AI答题网</div>
           </div>
         </a-space>
       </a-layout-header>
@@ -13,15 +13,20 @@
         <a-space direction="vertical" size="large" :style="{ width: '600px' }">
           <a-tabs default-active-key="1">
             <a-tab-pane key="1" title="登录">
-              <a-form-item field="name" label="用户名">
-                <a-input v-model="form.name" placeholder="请输入用户名" />
-              </a-form-item>
-              <a-form-item field="password" label="密码">
-                <a-input v-model="form.password" placeholder="请输入密码" />
-              </a-form-item>
-              <a-form-item>
-                <a-button type="primary" @click="login">登录</a-button>
-              </a-form-item>
+              <a-form :model="form" :layout="layout">
+                <a-form-item field="name" label="用户名">
+                  <a-input v-model="form.name" placeholder="请输入用户名" />
+                </a-form-item>
+                <a-form-item field="password" label="密码">
+                  <a-input-password
+                    v-model="form.password"
+                    placeholder="请输入密码"
+                  />
+                </a-form-item>
+                <a-form-item>
+                  <a-button type="primary" @click="login">登录</a-button>
+                </a-form-item>
+              </a-form>
             </a-tab-pane>
             <a-tab-pane key="2" title="注册">
               <a-form-item field="name" label="用户名">
@@ -53,7 +58,9 @@
 import { reactive, ref } from "vue";
 import { userLoginUsingPost } from "@/api/userController";
 import { useLoginStore } from "@/store/userStore";
-
+import { Message } from "@arco-design/web-vue";
+import { useRouter } from "vue-router";
+const router = useRouter();
 const userInfo = useLoginStore();
 const layout = ref("horizontal");
 const form = reactive({
@@ -62,17 +69,23 @@ const form = reactive({
   repassword: "",
 });
 
-const login = () => {
+const login = async () => {
   console.log(form);
   let data = {
     userAccount: form.name,
     userPassword: form.password,
   };
-  userLoginUsingPost(data).then((res) => {
-    if (res.data.code == 0) {
-      window.location.href = "/";
-    }
-  });
+  const res = await userLoginUsingPost(data);
+  if (res.data.code === 0) {
+    await userInfo.fetchLoginUser();
+    Message.success("登录成功");
+    await router.push({
+      path: "/",
+      replace: true,
+    });
+  } else {
+    Message.error("登录失败，" + res.data.message);
+  }
 };
 </script>
 <style scoped>

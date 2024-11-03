@@ -13,7 +13,7 @@
         >
           <div class="titleBar">
             <img class="logo" src="../assets/logo.png" alt="" />
-            <div class="logo-text">答题哟</div>
+            <div class="logo-text">AI答题网</div>
           </div>
         </a-menu-item>
         <a-menu-item v-for="item in visibleMeau" :key="item.path"
@@ -34,7 +34,7 @@
 //引入路由页面
 import { routes } from "@/router/routes";
 import { useRouter } from "vue-router";
-import { ref } from "vue";
+import { computed, ref } from "vue";
 import { useLoginStore } from "@/store/userStore";
 import checkAccess from "@/access/checkAccess";
 const route = useRouter();
@@ -45,19 +45,23 @@ userInfo.fetchLoginUser();
 const menu = ref(["/"]);
 //路由跳转时候更改菜单项
 route.afterEach((to) => {
-  console.log(to, "to");
+  // console.log(to, "to");
   menu.value = [to.path];
 });
-//获取未隐藏的菜单
-const visibleMeau = routes.filter((item) => {
-  if (item.meta && item.meta.hidden) {
-    return false;
-  }
-  // 根据权限过滤菜单
-  // if (!checkAccess(userInfo.loginUser, item.meta?.access as string)) {
-  //   return false;
-  // }
-  return true;
+//获取未隐藏的菜单 进入页面就加载
+const visibleMeau = computed(() => {
+  return routes.filter((item) => {
+    console.log(item, "item");
+    if (item.meta && item.meta.hidden) {
+      return false;
+    }
+    // 根据权限过滤菜单
+    console.log(userInfo.loginUser, "userInfo.loginUser");
+    if (!checkAccess(userInfo.loginUser, item.meta?.access as string)) {
+      return false;
+    }
+    return true;
+  });
 });
 //点击菜单跳转路由
 const doMeauOnclick = (key: string) => {

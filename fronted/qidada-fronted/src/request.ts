@@ -23,7 +23,7 @@ myAxios.interceptors.request.use(
 // 添加响应拦截器
 myAxios.interceptors.response.use(
   function (response) {
-    console.log(response, "response");
+    // console.log(response, "response");
     const { data } = response;
     // 如果返回的状态码是401，则跳转到登录页面
     if (data.code == 40100) {
