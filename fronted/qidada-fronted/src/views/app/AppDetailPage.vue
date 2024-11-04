@@ -48,7 +48,7 @@
           <a-button type="text">分享应用</a-button>
         </a-space>
       </a-col>
-      <a-col style="margin-right: 5%" flex="400px">
+      <a-col style="margin-right: 10%" flex="400px">
         <a-image style="justify-content: center" :src="appData.appIcon" />
       </a-col>
     </a-row>
@@ -106,6 +106,6 @@ let loginUser = loginUserStore.loginUser;
 
 <style scoped>
 .cardStyle {
-  margin-left: 5%;
+  margin-left: 30%;
 }
 </style>
