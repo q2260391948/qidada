@@ -141,6 +141,18 @@ public class QuestionController {
         return ResultUtils.success(questionService.getQuestionVO(question, request));
     }
 
+
+    /**
+     * 根据appId获取题目列表
+     */
+    @GetMapping("/get/getByAppId")
+    public BaseResponse<Question> getQuestionByAppId(Long appId) {
+        ThrowUtils.throwIf(appId <= 0, ErrorCode.PARAMS_ERROR);
+        // 查询数据库
+        List<Question> questionList = questionService.getQuestionByAppId(appId);
+        return ResultUtils.success(questionList.get(0));
+    }
+
     /**
      * 分页获取题目列表（仅管理员可用）
      *

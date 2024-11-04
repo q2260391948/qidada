@@ -190,6 +190,12 @@ declare namespace API {
     message?: string;
   };
 
+  type BaseResponseQuestion_ = {
+    code?: number;
+    data?: Question;
+    message?: string;
+  };
+
   type BaseResponseQuestionVO_ = {
     code?: number;
     data?: QuestionVO;
@@ -249,6 +255,11 @@ declare namespace API {
   type getPostVOByIdUsingGETParams = {
     /** id */
     id?: number;
+  };
+
+  type getQuestionByAppIdUsingGETParams = {
+    /** appId */
+    appId?: number;
   };
 
   type getQuestionVOByIdUsingGETParams = {

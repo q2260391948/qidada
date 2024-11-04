@@ -13,6 +13,7 @@ import AdminUserAnswerPage from "@/views/admin/AdminUserAnswerPage.vue";
 import AddAppPage from "@/views/add/AddAppPage.vue";
 import AppDetailPage from "@/views/app/AppDetailPage.vue";
 import AddQuestionPage from "@/views/add/AddQuestionPage.vue";
+import AddScoringResultPage from "@/views/add/AddScoringResultPage.vue";
 export const routes: Array<RouteRecordRaw> = [
   {
     path: "/",
@@ -33,6 +34,15 @@ export const routes: Array<RouteRecordRaw> = [
     meta: {
       hidden: true,
     },
+  },
+  {
+    path: "/add/scoringResult/:id",
+    name: "设置评分",
+    props: true,
+    component: AddScoringResultPage,
+    // meta: {
+    //   hidden: true,
+    // },
   },
   {
     path: "/admin",

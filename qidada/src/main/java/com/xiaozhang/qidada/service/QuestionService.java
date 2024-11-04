@@ -9,6 +9,7 @@ import com.xiaozhang.qidada.model.entity.Question;
 import com.xiaozhang.qidada.model.vo.QuestionVO;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 
 /**
  * 题目服务
@@ -49,4 +50,6 @@ public interface QuestionService extends IService<Question> {
      * @return
      */
     Page<QuestionVO> getQuestionVOPage(Page<Question> questionPage, HttpServletRequest request);
+
+    List<Question> getQuestionByAppId(Long appId);
 }

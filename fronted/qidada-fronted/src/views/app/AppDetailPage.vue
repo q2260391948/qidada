@@ -43,7 +43,7 @@
         <a-space class="cardStyle">
           <a-button type="primary">开始答题</a-button>
           <a-button @click="toAddQuestion()">设置题目</a-button>
-          <a-button type="dashed">设置评分</a-button>
+          <a-button type="dashed" @click="toScoringResult()">设置评分</a-button>
           <a-button type="outline">修改应用</a-button>
           <a-button type="text">分享应用</a-button>
         </a-space>
@@ -96,6 +96,9 @@ const loadData = async () => {
 };
 const toAddQuestion = () => {
   router.push(`/add/question/${props.id}`);
+};
+const toScoringResult = () => {
+  router.push(`/add/scoringResult/${props.id}`);
 };
 watchEffect(() => {
   loadData();

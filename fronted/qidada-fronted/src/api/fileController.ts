@@ -38,8 +38,7 @@ export async function uploadFileUsingPost(
       ...params,
     },
     data: formData,
-    // @ts-ignore
-    requestType: "form",
+    // requestType: 'form',
     ...(options || {}),
   });
 }

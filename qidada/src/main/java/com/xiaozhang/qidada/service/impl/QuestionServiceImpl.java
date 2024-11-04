@@ -173,4 +173,11 @@ public class QuestionServiceImpl extends ServiceImpl<QuestionMapper, Question> i
         return questionVOPage;
     }
 
+    @Override
+    public List<Question> getQuestionByAppId(Long appId) {
+        QueryWrapper<Question> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("appId", appId);
+        return this.list(queryWrapper);
+    }
+
 }

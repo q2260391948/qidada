@@ -47,6 +47,21 @@ export async function editQuestionUsingPost(
   });
 }
 
+/** getQuestionByAppId GET /api/question/get/getByAppId */
+export async function getQuestionByAppIdUsingGet(
+  // 叠加生成的Param类型 (非body参数swagger默认没有生成对象)
+  params: API.getQuestionByAppIdUsingGETParams,
+  options?: { [key: string]: any },
+) {
+  return request<API.BaseResponseQuestion_>('/api/question/get/getByAppId', {
+    method: 'GET',
+    params: {
+      ...params,
+    },
+    ...(options || {}),
+  });
+}
+
 /** getQuestionVOById GET /api/question/get/vo */
 export async function getQuestionVoByIdUsingGet(
   // 叠加生成的Param类型 (非body参数swagger默认没有生成对象)

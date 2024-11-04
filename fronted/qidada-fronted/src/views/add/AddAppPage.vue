@@ -84,7 +84,7 @@ import { useLoginStore } from "@/store/userStore";
 import { useRouter } from "vue-router";
 import API from "@/api";
 import { APP_SCORING_STRATEGY_MAP, APP_TYPE_MAP } from "@/constant/app";
-import { addAppUsingPost } from "@/api/appController";
+import { addAppUsingPost, getAppVoByIdUsingGet } from "@/api/appController";
 import { Message } from "@arco-design/web-vue";
 
 //接收路由里的参数
