@@ -1,14 +1,9 @@
 <template>
   <div class="layout-demo">
     <a-layout style="height: 100vh">
-      <a-layout-header class="header" style="display: flex; justify-content: center; align-items: center; height: 64px;">
-        <a-space style="margin-left: -30%">
-          <div class="titleBar" style="display: flex; align-items: center; text-align: center;">
-            <img class="logo" src="../assets/logo.png" alt="" style="margin-right: 8px;" />
-            <div class="logo-text">AI答题网</div>
-          </div>
-        </a-space>
-      </a-layout-header>
+<!--      <a-layout-header class="header" style="display: flex; justify-content: center; align-items: center; height: 64px;">-->
+
+<!--      </a-layout-header>-->
 
       <a-layout-content class="content" style="display: flex;width: 100%">
         <!-- 左侧 Banner 区域 -->
@@ -19,6 +14,12 @@
         <!-- 右侧登录注册区域 -->
         <div style="flex: 4; display: flex; justify-content: center; align-items: center; padding: 20px;">
           <a-space direction="vertical" size="large" :style="{ width: '400px' }">
+            <a-space style="margin-left: -30%">
+              <div class="titleBar" style="display: flex; align-items: center; text-align: center;">
+                <img class="logo" src="../assets/logo.png" alt="" style="margin-right: 8px;" />
+                <div class="logo-text">AI答题网</div>
+              </div>
+            </a-space>
             <a-tabs default-active-key="1">
               <a-tab-pane key="1" title="登录">
                 <a-form :model="form" :layout="layout">
@@ -114,7 +115,7 @@ const login = async () => {
   margin-top: -2%;
   padding: 32px;
   text-align: center;
-  background: #efefef;
+  //background: #efefef;
 }
 
 .titleBar {

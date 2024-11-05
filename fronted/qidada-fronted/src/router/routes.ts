@@ -40,9 +40,9 @@ export const routes: Array<RouteRecordRaw> = [
     name: "设置评分",
     props: true,
     component: AddScoringResultPage,
-    // meta: {
-    //   hidden: true,
-    // },
+    meta: {
+      hidden: true,
+    },
   },
   {
     path: "/admin",

@@ -29,7 +29,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, watchEffect, withDefaults, defineProps } from "vue";
+import { ref, watchEffect, withDefaults, defineProps ,defineExpose} from "vue";
 import {
   deleteScoringResultUsingPost,
   listScoringResultByPageUsingPost,
@@ -37,9 +37,6 @@ import {
 import API from "@/api";
 import message from "@arco-design/web-vue/es/message";
 import { dayjs } from "@arco-design/web-vue/es/_utils/date";
-
-const formSearchParams = ref<API.ScoringResultQueryRequest>({});
-
 interface Props {
   appId: string;
   initDate: (ScoringResult: API.ScoringResultVO) => void;
@@ -67,6 +64,7 @@ const total = ref<number>(0);
  * 加载数据
  */
 const loadData = async () => {
+  console.log("更新数据")
   const res = await listScoringResultByPageUsingPost(searchParams.value);
   if (res.data.code === 0) {
     dataList.value = res.data.data?.records || [];
@@ -75,6 +73,11 @@ const loadData = async () => {
     message.error("获取数据失败，" + res.data.message);
   }
 };
+
+//暴露参数给父组件
+defineExpose({
+  loadData
+})
 
 /**
  * 当分页变化时，改变搜索条件，触发数据加载
