@@ -14,6 +14,7 @@ import AddAppPage from "@/views/add/AddAppPage.vue";
 import AppDetailPage from "@/views/app/AppDetailPage.vue";
 import AddQuestionPage from "@/views/add/AddQuestionPage.vue";
 import AddScoringResultPage from "@/views/add/AddScoringResultPage.vue";
+import DoAnswer from "@/views/answer/DoAnswerPage.vue";
 export const routes: Array<RouteRecordRaw> = [
   {
     path: "/",
@@ -27,9 +28,18 @@ export const routes: Array<RouteRecordRaw> = [
   },
   {
     path: "/update/app/:id",
-    name: "修改",
+    name: "修改应用",
     props: true,
     component: AddAppPage,
+    meta: {
+      hidden: true,
+    },
+  },
+  {
+    path: "/do/answer/:id",
+    name: "开始作答",
+    props: true,
+    component: DoAnswer,
     meta: {
       hidden: true,
     },

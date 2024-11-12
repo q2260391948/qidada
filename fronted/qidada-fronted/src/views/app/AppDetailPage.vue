@@ -1,11 +1,13 @@
 <template>
   <a-space
-    direction="vertical"
-    :size="16"
-    style="display: block; margin-top: 5%"
+      direction="vertical"
+      :size="16"
+      style="display: block; margin-top: 5%"
   >
-    <a-row class="grid-demo">
-      <a-col flex="auto">
+    <a-row class="grid-demo" style="width: 100%;">
+      <a-col :span="4">
+      </a-col>
+      <a-col flex="auto" :span="8">
         <div class="cardStyle">
           <h1>应用详情</h1>
           <h2>应用名称：{{ appData.appName }}</h2>
@@ -19,12 +21,12 @@
               作者：
               <div :style="{ display: 'flex', alignItems: 'center' }">
                 <a-avatar
-                  :size="24"
-                  :image-url="appData.user?.userAvatar"
-                  :style="{ marginRight: '8px' }"
+                    :size="24"
+                    :image-url="appData.user?.userAvatar"
+                    :style="{ marginRight: '8px' }"
                 />
                 <a-typography-text
-                  >{{ appData.user?.userName ?? "无名" }}
+                >{{ appData.user?.userName ?? "无名" }}
                 </a-typography-text>
               </div>
             </a-space>
@@ -41,19 +43,27 @@
           </p>
         </div>
         <a-space class="cardStyle">
-          <a-button type="primary">开始答题</a-button>
+          <a-button type="primary" @click="toDoAnswer()">开始答题</a-button>
           <a-button v-if="isMyApp" @click="toAddQuestion()">设置题目</a-button>
           <a-button v-if="isMyApp" type="dashed" @click="toScoringResult()"
-            >设置评分
+          >设置评分
           </a-button>
           <a-button v-if="isMyApp" type="outline" @click="toPpdateApp()"
-            >修改应用</a-button
+          >修改应用
+          </a-button
           >
           <a-button type="text">分享应用</a-button>
         </a-space>
       </a-col>
-      <a-col style="margin-right: 10%" flex="400px">
-        <a-image style="justify-content: center" :src="appData.appIcon" />
+      <a-col :span="8">
+        <a-image
+            :src="appData.appIcon"
+            :width="'100%'"
+            :height="'auto'"
+            :style="{ maxWidth: '100%', maxHeight: '300px', objectFit: 'contain' }"
+        />
+      </a-col>
+      <a-col :span="4">
       </a-col>
     </a-row>
   </a-space>
@@ -61,14 +71,14 @@
 </template>
 
 <script setup lang="ts">
-import { ref, withDefaults, defineProps, watchEffect } from "vue";
-import { getAppVoByIdUsingGet } from "@/api/appController";
+import {ref, withDefaults, defineProps, watchEffect, computed} from "vue";
+import {getAppVoByIdUsingGet} from "@/api/appController";
 import message from "@arco-design/web-vue/es/message";
 import API from "@/api";
-import { APP_SCORING_STRATEGY_MAP, APP_TYPE_MAP } from "../../constant/app";
-import { useLoginStore } from "@/store/userStore";
+import {APP_SCORING_STRATEGY_MAP, APP_TYPE_MAP} from "../../constant/app";
+import {useLoginStore} from "@/store/userStore";
 import dayjs from "dayjs";
-import { useRouter } from "vue-router";
+import {useRouter} from "vue-router";
 
 const router = useRouter();
 
@@ -106,28 +116,27 @@ const toAddQuestion = () => {
 const toScoringResult = () => {
   router.push(`/add/scoringResult/${props.id}`);
 };
+const toDoAnswer = () => {
+  router.push(`/do/answer/${props.id}`);
+}
 
 const toPpdateApp = () => {
   router.push(`/update/app/${props.id}`);
 };
-
+//确保登录用户信息和app信息更新时同步更新isMyApp的值
+const isMyApp = computed(() => {
+  return loginUser?.id == appData.value.userId;
+});
 watchEffect(() => {
   loadData();
 });
 const loginUserStore = useLoginStore();
 let loginUser = loginUserStore.loginUser;
-const isMyApp = () => {
-  console.log(loginUser?.id, appData.value.userId);
-  if (loginUser?.id == appData.value.userId) {
-    return true;
-  } else {
-    return false;
-  }
-};
+
 </script>
 
 <style scoped>
 .cardStyle {
-  margin-left: 30%;
+//margin-left: 30%; //width: 80%;
 }
 </style>
