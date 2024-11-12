@@ -42,9 +42,13 @@
         </div>
         <a-space class="cardStyle">
           <a-button type="primary">开始答题</a-button>
-          <a-button @click="toAddQuestion()">设置题目</a-button>
-          <a-button type="dashed" @click="toScoringResult()">设置评分</a-button>
-          <a-button type="outline">修改应用</a-button>
+          <a-button v-if="isMyApp" @click="toAddQuestion()">设置题目</a-button>
+          <a-button v-if="isMyApp" type="dashed" @click="toScoringResult()"
+            >设置评分
+          </a-button>
+          <a-button v-if="isMyApp" type="outline" @click="toPpdateApp()"
+            >修改应用</a-button
+          >
           <a-button type="text">分享应用</a-button>
         </a-space>
       </a-col>
@@ -65,7 +69,9 @@ import { APP_SCORING_STRATEGY_MAP, APP_TYPE_MAP } from "../../constant/app";
 import { useLoginStore } from "@/store/userStore";
 import dayjs from "dayjs";
 import { useRouter } from "vue-router";
+
 const router = useRouter();
+
 //接收路由里的参数
 interface Props {
   id: string;
@@ -100,11 +106,24 @@ const toAddQuestion = () => {
 const toScoringResult = () => {
   router.push(`/add/scoringResult/${props.id}`);
 };
+
+const toPpdateApp = () => {
+  router.push(`/update/app/${props.id}`);
+};
+
 watchEffect(() => {
   loadData();
 });
 const loginUserStore = useLoginStore();
 let loginUser = loginUserStore.loginUser;
+const isMyApp = () => {
+  console.log(loginUser?.id, appData.value.userId);
+  if (loginUser?.id == appData.value.userId) {
+    return true;
+  } else {
+    return false;
+  }
+};
 </script>
 
 <style scoped>

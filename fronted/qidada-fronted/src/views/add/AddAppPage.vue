@@ -65,8 +65,8 @@
     </a-form-item>
     <a-form-item>
       <a-button type="primary" style="margin-left: 35%" @click="submit()"
-        >提交</a-button
-      >
+        >提交
+      </a-button>
     </a-form-item>
   </a-form>
 </template>
@@ -84,7 +84,11 @@ import { useLoginStore } from "@/store/userStore";
 import { useRouter } from "vue-router";
 import API from "@/api";
 import { APP_SCORING_STRATEGY_MAP, APP_TYPE_MAP } from "@/constant/app";
-import { addAppUsingPost, getAppVoByIdUsingGet } from "@/api/appController";
+import {
+  addAppUsingPost,
+  getAppVoByIdUsingGet,
+  updateAppUsingPost,
+} from "@/api/appController";
 import { Message } from "@arco-design/web-vue";
 
 //接收路由里的参数
@@ -92,43 +96,68 @@ interface Props {
   id: string;
 }
 
-const app = ref({
-  appDesc: "",
-  appIcon: "",
-  appName: "",
-  appType: 0,
-  scoringStrategy: 0,
-} as API.AppAddRequest);
-//拿到用户信息
-const loginUserStore = useLoginStore();
-let loginUser = loginUserStore.loginUser;
-//路由route
-const useRoute = useRouter();
 //从路由中加载参数
 const props = withDefaults(defineProps<Props>(), {
   id: () => {
     return "";
   },
 });
+const app = ref({
+  appDesc: "",
+  appIcon: "",
+  appName: "",
+  appType: 0,
+  scoringStrategy: 0,
+  id: "",
+} as any);
+//拿到用户信息
+const loginUserStore = useLoginStore();
+let loginUser = loginUserStore.loginUser;
+//路由route
+const useRoute = useRouter();
 
 const submit = async () => {
-  const res = await addAppUsingPost(app.value);
-  console.log(res, "添加结果");
-  if (res.data && res.data.code === 0) {
-    Message.success("操作成功");
-    //两秒后跳转
-    setTimeout(() => {
-      useRoute.push(`/app/detail/${res.data.data}`);
-    }, 2000);
+  let result;
+  if (app.value.id) {
+    result = await updateAppUsingPost(app.value);
   } else {
-    Message.error("操作失败，" + res.data.message);
+    result = await addAppUsingPost(app.value);
+  }
+  console.log(result, "添加结果");
+  if (result.data && result.data.code === 0) {
+    Message.success("操作成功");
+    if (app.value.id) {
+      setTimeout(() => {
+        useRoute.push(`/app/detail/${props.id}`);
+      }, 2000);
+    } else {
+      //两秒后跳转
+      setTimeout(() => {
+        useRoute.push(`/app/detail/${result.data.data}`);
+      }, 2000);
+    }
+  } else {
+    Message.error("操作失败，" + result.data.message);
   }
 };
 
 //钩子函数
-watchEffect(() => {
+watchEffect(async () => {
   if (loginUser.userName == "未登录") {
     useRoute.push("/user/login");
+  }
+  if (props.id != "" && props.id != undefined) {
+    const res = await getAppVoByIdUsingGet({
+      id: props.id as any,
+    });
+    if (res.data && res.data.code === 0) {
+      app.value.appName = res.data.data?.appName;
+      app.value.appDesc = res.data.data?.appDesc;
+      app.value.appIcon = res.data.data?.appIcon;
+      app.value.appType = res.data.data?.appType;
+      app.value.scoringStrategy = res.data.data?.scoringStrategy;
+      app.value.id = res.data.data?.id;
+    }
   }
 });
 </script>

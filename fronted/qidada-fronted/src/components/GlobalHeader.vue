@@ -51,12 +51,12 @@ route.afterEach((to) => {
 //获取未隐藏的菜单 进入页面就加载
 const visibleMeau = computed(() => {
   return routes.filter((item) => {
-    console.log(item, "item");
+    // console.log(item, "item");
     if (item.meta && item.meta.hidden) {
       return false;
     }
     // 根据权限过滤菜单
-    console.log(userInfo.loginUser, "userInfo.loginUser");
+    // console.log(userInfo.loginUser, "userInfo.loginUser");
     if (!checkAccess(userInfo.loginUser, item.meta?.access as string)) {
       return false;
     }
