@@ -15,6 +15,7 @@ import AppDetailPage from "@/views/app/AppDetailPage.vue";
 import AddQuestionPage from "@/views/add/AddQuestionPage.vue";
 import AddScoringResultPage from "@/views/add/AddScoringResultPage.vue";
 import DoAnswer from "@/views/answer/DoAnswerPage.vue";
+import Result from "@/views/answer/ResultPage.vue";
 export const routes: Array<RouteRecordRaw> = [
   {
     path: "/",
@@ -40,6 +41,15 @@ export const routes: Array<RouteRecordRaw> = [
     name: "开始作答",
     props: true,
     component: DoAnswer,
+    meta: {
+      hidden: true,
+    },
+  },
+  {
+    path: "/result/answer/:id",
+    name: "结果展示",
+    props: true,
+    component: Result,
     meta: {
       hidden: true,
     },

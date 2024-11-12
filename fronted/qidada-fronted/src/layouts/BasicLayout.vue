@@ -34,5 +34,6 @@ console.log(userInfo, "userInfo");
   color: #999;
   font-size: 12px;
   text-align: center;
+  margin-bottom: 10px;
 }
 </style>
