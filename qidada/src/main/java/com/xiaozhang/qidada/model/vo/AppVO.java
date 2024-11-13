@@ -85,6 +85,11 @@ public class AppVO implements Serializable {
      */
     private UserVO user;
 
+
+    /**
+     * 答题ID
+     */
+    private Long answerId;
     /**
      * 封装类转对象
      *

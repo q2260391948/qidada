@@ -100,3 +100,6 @@ knife4j:
         api-rule: package
         api-rule-resources:
           - com.xiaozhang.qidada.controller
+
+ai:
+  apiKey: d619389f93d090ffa858823e75018b2f.mTgzwcITKo3p6wmU
