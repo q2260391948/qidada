@@ -10,10 +10,12 @@ import com.xiaozhang.qidada.model.dto.question.QuestionContentDTO;
 import com.xiaozhang.qidada.model.entity.App;
 import com.xiaozhang.qidada.model.enums.AppTypeEnum;
 import com.xiaozhang.qidada.service.AppService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
 import java.util.List;
@@ -22,7 +24,8 @@ import java.util.List;
  * @author:22603
  * @Date:2024/11/13 下午3:41
  */
-@Controller
+@RestController
+@Slf4j
 @RequestMapping("/aiGenerateQuestion")
 public class AiGenerateQuestionController {
 
@@ -55,11 +58,12 @@ public class AiGenerateQuestionController {
 
     @PostMapping("/ai_generate")
     public BaseResponse<List<QuestionContentDTO>> generateQuestion(@RequestBody AiGenerateQuestionRequest aiGenerateQuestionRequest){
+        Long appId = aiGenerateQuestionRequest.getAppId();
         //判断请求参数是否为空
-        ThrowUtils.throwIf(aiGenerateQuestionRequest == null, ErrorCode.valueOf("请求参数不能为空"));
+        ThrowUtils.throwIf(appId == null, ErrorCode.PARAMS_ERROR);
         //根据id查到app信息
-        App app = appService.getById(aiGenerateQuestionRequest.getAppId());
-        ThrowUtils.throwIf(app == null, ErrorCode.valueOf("app不存在"));
+        App app = appService.getById(appId);
+        ThrowUtils.throwIf(app == null, ErrorCode.NOT_FOUND_ERROR);
         //拼接请求信息
         //MBTI 性格测试，
         //【【【快来测测你的 MBTI 性格】】】，
@@ -69,10 +73,12 @@ public class AiGenerateQuestionController {
         StringBuilder stringBuilder=new StringBuilder();
         stringBuilder.append(app.getAppName()).append("\n");
         stringBuilder.append("【【【").append(app.getAppDesc()).append("】】】\n");
-        stringBuilder.append(AppTypeEnum.getEnumByValue(app.getAppType()).getText() + "类").append("\n");
+        stringBuilder.append(AppTypeEnum.getEnumByValue(app.getAppType()).getText()).append("\n");
         stringBuilder.append(aiGenerateQuestionRequest.getQuestionNumber()).append("\n");
         stringBuilder.append(aiGenerateQuestionRequest.getOptionNumber()).append("\n");
         //调用ai接口
+        log.info("拼接参数为:");
+        log.info(stringBuilder.toString());
         List<QuestionContentDTO> contentDTOS = aiManager.asyncInvoke(prompt, stringBuilder.toString(), false);
         return ResultUtils.success(contentDTOS);
     }

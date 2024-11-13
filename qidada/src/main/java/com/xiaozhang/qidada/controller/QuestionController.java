@@ -150,7 +150,10 @@ public class QuestionController {
         ThrowUtils.throwIf(appId <= 0, ErrorCode.PARAMS_ERROR);
         // 查询数据库
         List<Question> questionList = questionService.getQuestionByAppId(appId);
-        return ResultUtils.success(questionList.get(0));
+        if (!questionList.isEmpty()) {
+            return ResultUtils.success(questionList.get(0));
+        }
+        return ResultUtils.success(null);
     }
 
     /**
