@@ -65,7 +65,7 @@
           <div class="avatar-upload">
             <a-avatar
               :size="80"
-              :image-url="userProfile.userAvatar || '/default-avatar.png'"
+              :image-url="userProfile.userAvatar"
             />
             <a-upload>
               <a-button type="primary">更换头像</a-button>
@@ -103,6 +103,7 @@ const profileDrawerVisible = ref(false);
 
 // 用户资料表单数据
 const userProfile = ref({
+  id:userInfo.loginUser.id,
   userName: userInfo.loginUser.userName,
   userAvatar: userInfo.loginUser.userAvatar,
   email: userInfo.loginUser.email,
@@ -141,6 +142,7 @@ const goToLogin = () => {
 const showUserProfile = () => {
   // 重置表单数据
   userProfile.value = {
+    id:userInfo.loginUser.id,
     userName: userInfo.loginUser.userName,
     userAvatar: userInfo.loginUser.userAvatar,
     email: userInfo.loginUser.email,

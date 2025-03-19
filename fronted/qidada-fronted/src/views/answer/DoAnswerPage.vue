@@ -25,7 +25,7 @@
         <!-- 题目内容 -->
         <div class="question-content" v-if="currentQuestion">
           <h2 class="question-title">
-            {{ currentIndex + 1 }}. {{ currentQuestion.title }}
+             {{ currentQuestion.title }}
           </h2>
 
           <!-- 选项列表 -->

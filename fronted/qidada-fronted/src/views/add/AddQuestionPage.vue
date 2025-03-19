@@ -1,6 +1,11 @@
 <template>
-  <div style="margin-top: 5%; width: 80%; margin-left: 10%">
-    <div style="margin-bottom: 20px; text-align: right">
+  <div class="page-container">
+    <!-- 顶部操作区 -->
+    <div class="action-header">
+      <div class="app-info">
+        <h2>{{ appData.appName }}</h2>
+        <p class="app-desc">{{ appData.appDesc }}</p>
+      </div>
       <a-button type="primary" status="success" @click="showAIDrawer">
         <template #icon>
           <icon-robot />
@@ -9,6 +14,156 @@
       </a-button>
     </div>
 
+    <!-- 题目列表区域 -->
+    <div class="questions-grid">
+      <a-card
+        v-for="(Content, index) in questionContent"
+        :key="index"
+        class="question-card"
+        :title="`第${index + 1}道题目`"
+        hoverable
+      >
+        <template #extra>
+          <a-space>
+            <a-button
+              type="primary"
+              v-if="index > 0"
+              @click="removeQuestion(index)"
+              size="small"
+            >
+              <template #icon>
+                <icon-minus />
+              </template>
+            </a-button>
+            <a-button type="primary" @click="addQuestion(index)" size="small">
+              <template #icon>
+                <icon-plus />
+              </template>
+            </a-button>
+          </a-space>
+        </template>
+
+        <a-form-item field="title" label="题目内容">
+          <a-input
+            v-model="Content.title"
+            placeholder="请输入题目内容"
+            allow-clear
+          />
+        </a-form-item>
+
+        <div class="options-header">
+          <span class="options-title">选项列表</span>
+          <a-space>
+            <a-button type="outline" size="small" @click="addOptions(index)">
+              <template #icon>
+                <icon-plus />
+              </template>
+              添加选项
+            </a-button>
+            <a-button
+              type="outline"
+              status="danger"
+              size="small"
+              @click="deleteOpentins(index)"
+            >
+              <template #icon>
+                <icon-delete />
+              </template>
+              删除选项
+            </a-button>
+          </a-space>
+        </div>
+
+        <div class="options-list">
+          <div
+            v-for="(option, optionIndex) in Content.options"
+            :key="optionIndex"
+            class="option-item"
+          >
+            <div class="option-header">
+              <div class="option-index-group">
+                <span class="option-index">选项 {{ optionIndex + 1 }}</span>
+<!--                <a-input-->
+<!--                  v-model="option.key"-->
+<!--                  placeholder="选项序号（如：A、B、C）"-->
+<!--                  class="option-key-input"-->
+<!--                >-->
+<!--                  <template #prefix>-->
+<!--                    <icon-tag />-->
+<!--                  </template>-->
+<!--                </a-input>-->
+              </div>
+              <a-tag color="arcoblue">得分: {{ option.score || 0 }}</a-tag>
+            </div>
+
+            <div class="option-content">
+              <!-- 选项内容和得分 -->
+              <div class="option-row">
+                <div class="input-group" style="width: 160px">
+                  <div class="field-label">选项序号</div>
+                  <a-input
+                    v-model="option.key"
+                    placeholder="选项序号（如：A、B、C）"
+                    class="option-key-input"
+                  >
+                    <template #prefix>
+                      <icon-tag />
+                    </template>
+                  </a-input>
+                </div>
+                <div class="input-group" style="width: 200px">
+                  <div class="field-label">选项得分</div>
+                  <a-input-number
+                    v-model="option.score"
+                    placeholder="0-100"
+                    :min="0"
+                    :max="100"
+                    class="option-score-input"
+                  >
+                    <template #prefix>
+                      <icon-star />
+                    </template>
+                  </a-input-number>
+                </div>
+              </div>
+
+              <!-- 第二行：选项内容 -->
+              <div class="input-group">
+                <div class="field-label">选项内容</div>
+                <a-textarea
+                  v-model="option.value"
+                  placeholder="请输入选项的具体内容描述"
+                  :auto-size="{ minRows: 2, maxRows: 4 }"
+                  class="option-result-input"
+                  allow-clear
+                />
+              </div>
+
+              <!-- 第三行：选项结果 -->
+              <div class="input-group">
+                <div class="field-label">选项结果描述</div>
+                <a-textarea
+                  v-model="option.result"
+                  placeholder="请描述选择该选项后的结果分析"
+                  :auto-size="{ minRows: 3, maxRows: 6 }"
+                  class="option-result-input"
+                  allow-clear
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+      </a-card>
+    </div>
+
+    <!-- 底部提交按钮 -->
+    <div class="submit-section">
+      <a-button type="primary" size="large" @click="submit">
+        保存题目配置
+      </a-button>
+    </div>
+
+    <!-- AI生成抽屉 -->
     <a-drawer
       :visible="visible"
       @cancel="handleCancel"
@@ -69,94 +224,9 @@
         </a-space>
       </template>
     </a-drawer>
-
-    <div :style="{ display: 'flex', flexWrap: 'wrap' }">
-      <div
-        v-for="(Content, index) in questionContent"
-        :key="index"
-        :style="{ flexBasis: '23%', marginRight: '2%', marginBottom: '2%' }"
-      >
-        <a-card
-          :style="{ width: '100%', height: '400px' }"
-          :title="`第${index + 1}道题目`"
-          hoverable
-        >
-          <template #extra>
-            <!-- 第一个按钮，减号按钮，右边添加间距 -->
-            <a-button
-              type="primary"
-              v-if="index > 0"
-              @click="removeQuestion(index)"
-              :style="{ marginRight: '8px' }"
-            >
-              <template #icon>
-                <icon-minus />
-              </template>
-            </a-button>
-
-            <!-- 第二个按钮，添加按钮 -->
-            <a-button type="primary" @click="addQuestion(index)">
-              <template #icon>
-                <icon-plus />
-              </template>
-            </a-button>
-          </template>
-          <a-form-item
-            :field="Content.title"
-            tooltip="请输入题目"
-            label="题目名称"
-          >
-            <a-input v-model="Content.title" placeholder="请输入题目" />
-          </a-form-item>
-          <a-space>
-            <a-button type="primary" @click="addOptions(index)">
-              <template #icon>
-                <icon-plus />
-              </template>
-              <template #default>Add</template>
-            </a-button>
-            <a-button type="primary" @click="deleteOpentins(index)">
-              <template #icon>
-                <icon-delete />
-              </template>
-              <template #default>Delete</template>
-            </a-button>
-          </a-space>
-
-          <!-- 设置选项列表容器的固定高度和滚动 -->
-          <div
-            :style="{
-              maxHeight: '240px',
-              overflowY: 'auto',
-              marginTop: '10px',
-            }"
-          >
-            <div
-              v-for="(option, optionIndex) in Content.options"
-              :key="optionIndex"
-            >
-              <a-space style="height: 40px; margin-top: 5%">
-                <a-form-item
-                  :field="option.key"
-                  :label="`选项${optionIndex + 1}`"
-                >
-                  <a-input v-model="option.key" placeholder="请输入选项描述" />
-                </a-form-item>
-                <a-form-item field="option.value" label="选项值">
-                  <a-input v-model="option.value" placeholder="请输入选项值" />
-                </a-form-item>
-              </a-space>
-            </div>
-          </div>
-        </a-card>
-        <!--        {{ questionContent }}-->
-      </div>
-    </div>
-    <a-space style="display: flex; justify-content: center; width: 100%">
-      <a-button type="primary" @click="submit()">提交</a-button>
-    </a-space>
   </div>
 </template>
+
 <script setup lang="ts">
 //钩子函数
 import { ref, watchEffect } from "vue";
@@ -199,15 +269,29 @@ const questionId = ref("");
 const appData = ref<API.AppVO>({});
 const questionContent = ref<API.QuestionContentDTO[]>([
   {
-    options: [],
     title: "",
+    options: [
+      {
+        key: "A",
+        value: "",
+        score: 0,
+        result: "",
+      },
+    ],
   },
 ]);
 //添加题目
 const addQuestion = (index: any) => {
   questionContent.value.splice(index + 1, 0, {
     title: "",
-    options: [],
+    options: [
+      {
+        key: "A",
+        value: "",
+        score: 0,
+        result: "",
+      },
+    ],
   });
 };
 
@@ -216,6 +300,8 @@ const addOptions = (index: any) => {
   questionContent.value[index].options?.push({
     key: "",
     value: "",
+    score: 0,
+    result: "",
   });
 };
 
@@ -224,12 +310,14 @@ const removeQuestion = (index: any) => {
   questionContent.value.splice(index, 1);
 };
 
-//删除选项
+//删选项
 const deleteOpentins = (index: any) => {
-  questionContent.value[index].options?.splice(
-    questionContent.value[index].options?.length - 1,
-    1
-  );
+  const options = questionContent.value[index].options;
+  if (options && options.length > 1) {
+    options.splice(options.length - 1, 1);
+  } else {
+    Message.warning("每道题目至少需要保留一个选项");
+  }
 };
 //提交题目
 const submit = async () => {
@@ -263,8 +351,9 @@ watchEffect(async () => {
   const res = await getQuestionByAppIdUsingGet({
     appId: props.id as any,
   });
-  if (res.data.code == 0 && res.data.data?.length > 0) {
+  if (res.data.code == 0) {
     questionContent.value = JSON.parse(res.data.data?.questionContent);
+    console.log(questionContent.value,"题目")
     questionId.value = res.data.data?.id;
   }
   //从路由中拿到应用信息
@@ -310,60 +399,301 @@ const handleOk = async () => {
   }
   generating.value = true;
   try {
-    // TODO: 调用后端AI生成接口)
     const res = await generateQuestionUsingPost({
       appId: props.id as any,
       questionNumber: aiForm.value.questionCount,
       optionNumber: aiForm.value.optionCount,
     });
-    if (res.data.code == 0 && res.data.data?.length > 0) {
+    if (res.data.code === 0 && res.data.data) {
       Message.success("题目生成成功！");
-      //更新题目列表
-      questionContent.value = res.data.data;
+      // 正确解析和追加新生成的题目
+      const newQuestions = Array.isArray(res.data.data)
+        ? res.data.data
+        : [res.data.data];
+      questionContent.value = [...questionContent.value, ...newQuestions];
       visible.value = false;
     } else {
-      Message.error("题目生成失败，请重试");
-      visible.value = true;
+      Message.error("题目生成失败：" + (res.data.message || "未知错误"));
     }
   } catch (error) {
-    Message.error("题目生成失败，" + error);
+    Message.error("生成失败：" + error);
   } finally {
     generating.value = false;
   }
 };
-
-// 获取应用信息
-watchEffect(async () => {
-  if (props.id) {
-    // TODO: 调用获取应用详情接口
-    // const res = await getAppDetail(props.id);
-    // appInfo.value = res.data;
-
-    // 临时模拟数据
-    appInfo.value = {
-      name: "示例应用",
-      description: "这是一个示例应用的描述信息",
-    };
-  }
-});
 </script>
+
 <style scoped>
-.card-demo {
-  width: 360px;
-  margin-left: 24px;
-  transition-property: all;
+.page-container {
+  max-width: 1200px;
+  margin: 24px auto;
+  padding: 0 24px;
 }
 
-.card-demo:hover {
+.action-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 24px;
+  padding: 16px 24px;
+  background: var(--color-bg-2);
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+}
+
+.app-info {
+  flex: 1;
+}
+
+.app-info h2 {
+  margin: 0;
+  color: var(--color-text-1);
+  font-size: 20px;
+}
+
+.app-desc {
+  margin: 8px 0 0;
+  color: var(--color-text-3);
+  font-size: 14px;
+}
+
+.questions-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(600px, 1fr));
+  gap: 24px;
+  margin-bottom: 24px;
+}
+
+.question-card {
+  height: auto;
+  min-height: 300px;
+  background: var(--color-bg-2);
+  border-radius: 8px;
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.question-card:hover {
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
   transform: translateY(-4px);
 }
 
-.arco-drawer-header {
+.options-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 16px 0;
+  padding-bottom: 8px;
   border-bottom: 1px solid var(--color-neutral-3);
 }
 
-.arco-drawer-footer {
+.options-title {
+  color: var(--color-text-1);
+  font-weight: 500;
+}
+
+.options-list {
+  margin-top: 16px;
+  padding: 16px;
+  background: var(--color-fill-1);
+  border-radius: 8px;
+}
+
+.option-item {
+  margin-bottom: 16px;
+  padding: 16px;
+  background: var(--color-bg-2);
+  border-radius: 8px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+  transition: all 0.3s ease;
+}
+
+.option-item:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  transform: translateY(-2px);
+}
+
+.option-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--color-neutral-3);
+}
+
+.option-index-group {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+.option-index {
+  min-width: 60px;
+  color: var(--color-text-1);
+  font-weight: 500;
+}
+
+.option-key-input {
+  width: 160px;
+  height: 32px;
+}
+
+.option-content {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding: 16px;
+  background: var(--color-fill-1);
+  border-radius: 8px;
+}
+
+.option-row {
+  display: flex;
+  gap: 16px;
+  align-items: flex-start;
+}
+
+.input-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.field-label {
+  color: var(--color-text-2);
+  font-weight: 500;
+  font-size: 14px;
+}
+
+.option-value-input,
+.option-result-input {
+  width: 100%;
+  font-size: 14px;
+  line-height: 1.6;
+  background-color: var(--color-bg-2);
+  border-radius: 4px;
+}
+
+:deep(.arco-textarea-wrapper) {
+  min-height: auto !important;
+  background-color: var(--color-bg-2);
+  border: 1px solid var(--color-neutral-3);
+  transition: all 0.2s;
+}
+
+:deep(.arco-textarea) {
+  min-height: auto !important;
+  padding: 8px 12px;
+}
+
+:deep(.arco-textarea-wrapper:hover) {
+  border-color: rgb(var(--primary-6));
+}
+
+:deep(.arco-textarea-wrapper:focus-within) {
+  border-color: rgb(var(--primary-6));
+  box-shadow: 0 0 0 2px rgba(var(--primary-6), 0.1);
+}
+
+.options-list::-webkit-scrollbar {
+  width: 8px;
+}
+
+.options-list::-webkit-scrollbar-thumb {
+  background-color: var(--color-neutral-3);
+  border-radius: 4px;
+}
+
+.options-list::-webkit-scrollbar-track {
+  background-color: var(--color-neutral-1);
+  border-radius: 4px;
+}
+
+.question-card {
+  transition: all 0.3s ease;
+}
+
+.question-card:hover {
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
+  transform: translateY(-4px);
+}
+
+:deep(.arco-btn) {
+  transition: all 0.3s ease;
+}
+
+:deep(.arco-btn:hover) {
+  transform: translateY(-2px);
+}
+
+.submit-section {
+  display: flex;
+  justify-content: center;
+  padding: 24px 0;
+  background: var(--color-bg-2);
+  border-radius: 8px;
+  box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.06);
+}
+
+:deep(.arco-drawer-header) {
+  border-bottom: 1px solid var(--color-neutral-3);
+}
+
+:deep(.arco-drawer-footer) {
   padding: 16px 24px;
   border-top: 1px solid var(--color-neutral-3);
+}
+
+:deep(.arco-form-item-label) {
+  font-weight: 500;
+}
+
+:deep(.arco-input-wrapper),
+:deep(.arco-textarea-wrapper) {
+  transition: all 0.3s ease;
+}
+
+:deep(.arco-input-wrapper:focus-within),
+:deep(.arco-textarea-wrapper:focus-within) {
+  transform: translateY(-1px);
+}
+
+:deep(.arco-textarea-wrapper),
+:deep(.arco-input-wrapper),
+:deep(.arco-input-number) {
+  height: 36px !important;
+}
+
+:deep(.arco-textarea) {
+  padding-top: 4px;
+  padding-bottom: 4px;
+  resize: none;
+}
+
+.option-value-input,
+.option-score-input {
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
+:deep(.arco-textarea-word-limit) {
+  margin-top: 4px;
+  color: var(--color-text-3);
+  font-size: 12px;
+}
+
+:deep(.arco-textarea)::-webkit-scrollbar {
+  width: 4px;
+}
+
+:deep(.arco-textarea)::-webkit-scrollbar-thumb {
+  background-color: var(--color-neutral-3);
+  border-radius: 2px;
+}
+
+:deep(.arco-textarea)::-webkit-scrollbar-track {
+  background-color: var(--color-neutral-1);
+  border-radius: 2px;
 }
 </style>

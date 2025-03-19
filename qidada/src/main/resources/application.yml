@@ -79,13 +79,12 @@ wx:
   # 微信开放平台
   # todo 需替换配置
   open:
-    appId: xxx
+    appId: xxxx
     appSecret: xxx
 # 对象存储
 # todo 需替换配置
 cos:
   client:
-    accessKey: xxx
     secretKey: xxx
     region: xxx
     bucket: xxx
@@ -102,4 +101,4 @@ knife4j:
           - com.xiaozhang.qidada.controller
 
 ai:
-  apiKey: d619389f93d090ffa858823e75018b2f.mTgzwcITKo3p6wmU
+  apiKey: xxx

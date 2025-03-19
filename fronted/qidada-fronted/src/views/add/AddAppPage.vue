@@ -146,17 +146,21 @@ watchEffect(async () => {
   if (loginUser.userName == "未登录") {
     useRoute.push("/user/login");
   }
-  if (props.id != "" && props.id != undefined) {
+  console.log(props.id, "id");
+  // 如果有 id 参数，说明是修改操作，需要加载应用数据
+  if (props.id) {
     const res = await getAppVoByIdUsingGet({
       id: props.id as any,
     });
     if (res.data && res.data.code === 0) {
-      app.value.appName = res.data.data?.appName;
-      app.value.appDesc = res.data.data?.appDesc;
-      app.value.appIcon = res.data.data?.appIcon;
-      app.value.appType = res.data.data?.appType;
-      app.value.scoringStrategy = res.data.data?.scoringStrategy;
-      app.value.id = res.data.data?.id;
+      app.value = {
+        appName: res.data.data?.appName,
+        appDesc: res.data.data?.appDesc,
+        appIcon: res.data.data?.appIcon,
+        appType: res.data.data?.appType,
+        scoringStrategy: res.data.data?.scoringStrategy,
+        id: res.data.data?.id,
+      };
     }
   }
 });

@@ -47,7 +47,7 @@
           <a-button v-if="isMyApp" type="dashed" @click="toScoringResult()"
             >设置评分
           </a-button>
-          <a-button v-if="isMyApp" type="outline" @click="toPpdateApp()"
+          <a-button v-if="isMyApp" type="outline" @click="toUpdateApp()"
             >修改应用
           </a-button>
           <a-button type="text">分享应用</a-button>
@@ -128,7 +128,7 @@ const toDoAnswer = () => {
   router.push(`/do/answer/${props.id}`);
 };
 
-const toPpdateApp = () => {
+const toUpdateApp = () => {
   router.push(`/update/app/${props.id}`);
 };
 //确保登录用户信息和app信息更新时同步更新isMyApp的值

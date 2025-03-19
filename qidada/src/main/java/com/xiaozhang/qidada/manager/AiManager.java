@@ -10,6 +10,8 @@ import com.zhipu.oapi.service.v4.model.*;
 import lombok.Data;
 import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
@@ -26,8 +28,16 @@ import static com.xiaozhang.qidada.common.ErrorCode.AIOPERATION_ERROR;
 @Data
 public class AiManager {
 
+    private static final Logger log = LoggerFactory.getLogger(AiManager.class);
     @Resource
     private ClientV4 client;
+
+    // 稳定的随机数
+    private static final float STABLE_TEMPERATURE = 0.05f;
+
+    // 不稳定的随机数
+    private static final float UNSTABLE_TEMPERATURE = 0.99f;
+
 
     private static @NotNull List<ChatMessage> getChatMessages(String systemText, String userText) {
         List<ChatMessage> messages = new ArrayList<>();
@@ -50,7 +60,8 @@ public class AiManager {
         ChatCompletionRequest chatCompletionRequest = ChatCompletionRequest.builder()
                 .model(Constants.ModelChatGLM4)
                 .stream(isStream)
-                .invokeMethod(Constants.invokeMethodAsync)
+                .temperature(STABLE_TEMPERATURE)
+                .invokeMethod(Constants.invokeMethod)
                 .messages(messages)
                 .build();
         try {
@@ -60,8 +71,9 @@ public class AiManager {
                 String content = (String) data.getChoices().get(0).getMessage().getContent();
                 //根据[ 和 ] 截取响应内容
                 int start = content.indexOf("[");
-                int end = content.indexOf("]") + 1;
+                int end = content.lastIndexOf("]")+1;
                 content = content.substring(start, end);
+                log.info("截取内容:{}",content);
                 return JSONUtil.toList(content, QuestionContentDTO.class);
             }
         } catch (Exception e) {
